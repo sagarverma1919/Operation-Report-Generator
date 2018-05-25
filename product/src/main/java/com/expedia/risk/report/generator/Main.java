@@ -27,7 +27,7 @@ public class Main {
         final ArrayList<Service> servicesList = new ArrayList<>(1);
         List<ServiceDetails> serviceDetailsList = new ArrayList<>(2);
         final ServiceDetails serviceDetails = new ServiceDetails();
-        serviceDetails.setServiceName("ListService");
+       // serviceDetails.setServiceName("ListService");
         List<WeeklyDetails> weeklyDetailsList = new ArrayList<>(2);
         final WeeklyDetails weeklyDetails = new WeeklyDetails();
         weeklyDetails.setQuery(
@@ -48,10 +48,11 @@ public class Main {
         weeklyDetails.setFields(fieldList);
         weeklyDetailsList.add(weeklyDetails);
         serviceDetails.setWeeklyDetails(weeklyDetailsList);
-        serviceDetailsList.add(serviceDetails);
+        //serviceDetailsList.add(serviceDetails);
         final Service service = new Service();
-        service.setServiceDetailsList(serviceDetailsList);
-
+        service.setServiceName("ListService");
+        //service.setServiceDetailsList(serviceDetailsList);
+        service.setWeeklyDetails(weeklyDetailsList);
         servicesList.add(service);
         report.setServices(servicesList);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();

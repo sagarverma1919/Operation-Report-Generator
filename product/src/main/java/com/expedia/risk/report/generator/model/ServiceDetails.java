@@ -16,19 +16,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ServiceDetails {
 
-    @JsonProperty("ServiceName")
-    private String serviceName;
 
     @JsonProperty("Details")
     private List<WeeklyDetails> weeklyDetails;
 
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(final String serviceName) {
-        this.serviceName = serviceName;
-    }
 
     public List<WeeklyDetails> getWeeklyDetails() {
         return weeklyDetails;

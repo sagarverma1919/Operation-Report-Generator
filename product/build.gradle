@@ -9,7 +9,6 @@ repositories {
     mavenCentral()
     maven {url "http://splunk.artifactoryonline.com/splunk/ext-releases-local"}
     maven { url "http://repo.spring.io/plugins-release" }
-  //  maven {url "https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-aws"}
 
 }
 

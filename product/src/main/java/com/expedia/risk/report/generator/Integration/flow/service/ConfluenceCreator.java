@@ -123,6 +123,7 @@ public class ConfluenceCreator
         Storage storage = new Storage();
         storage.setRepresentation("storage");
         storage.setValue(ConfluenceUtility.renderPage(report));
+      //  storage.setValue("<h1>dkjdkjdkjdk</h1>");
         Body body = new Body();
         body.setStorage(storage);
         request.setBody(body);
@@ -137,7 +138,7 @@ public class ConfluenceCreator
         {
             Report report = new Report();
             report.setEmailId("abc@expedia.com");
-            report.setReportName("Ops Report");
+            report.setReportName("Ops Report 10");
             report.setNoOfWeeks(3);
             final ArrayList<Service> servicesList = new ArrayList<>(1);
             List<ServiceDetails> serviceDetailsList = new ArrayList<>(2);
@@ -153,10 +154,11 @@ public class ConfluenceCreator
             weeklyDetails.setExtraColumns("Comments", null);
             weeklyDetails.setTableName("Operational Metrics");
             final ArrayList<String> resultList = new ArrayList<>(4);
-            resultList.add("addItems:POST:4,2,3:33.4,33.4,23.1:33.4,33.4,23.1:2:");
-            resultList.add("items:POST:4,2,3:33.4,33.4,23.1:33.4,33.4,23.1:2:");
-            resultList.add("items:GET:4,2,3:33.4,33.4,23.1:33.4,33.4,23.1:2:");
-            resultList.add("lookup:POST:4,2,3:33.4,33.4,23.1:33.4,33.4,23.1:2:");
+            resultList.add("addItems:POST:4,2,3::2");
+            resultList.add("addItems:POST:4,2,3::2");
+            resultList.add("addItems:POST:4,2,3::2");
+
+
             weeklyDetails.setResults(resultList);
             final ArrayList<Field> fieldList = new ArrayList<>();
             Field field = new Field();

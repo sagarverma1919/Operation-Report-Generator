@@ -68,12 +68,12 @@ public class WeeklyDetails {
         this.results = results;
     }
 
-    @JsonAnyGetter
+
     public Map<String, Object> getExtraColumns() {
         return this.extraColumns;
     }
 
-    @JsonAnySetter
+
     public void setExtraColumns(String name, Object value) {
         this.extraColumns.put(name, value);
     }

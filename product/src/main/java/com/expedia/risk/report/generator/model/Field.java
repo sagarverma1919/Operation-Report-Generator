@@ -16,8 +16,6 @@ public class Field {
     private String name;
     @JsonProperty("groupby_rank")
     private String groupbyRank;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("name")
     public String getName() {
@@ -39,14 +37,5 @@ public class Field {
         this.groupbyRank = groupbyRank;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
 
 }

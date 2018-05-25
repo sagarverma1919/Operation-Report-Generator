@@ -14,6 +14,11 @@ public class Field {
 
     @JsonProperty("name")
     private String name;
+
+    @JsonProperty("partitioned")
+    private boolean partitioned=false;
+
+
     @JsonProperty("groupby_rank")
     private String groupbyRank;
 
@@ -37,5 +42,13 @@ public class Field {
         this.groupbyRank = groupbyRank;
     }
 
+    public boolean isPartitioned()
+    {
+        return partitioned;
+    }
 
+    public void setPartitioned(boolean partitioned)
+    {
+        this.partitioned = partitioned;
+    }
 }

@@ -20,7 +20,7 @@ public class Report {
     @JsonProperty("EmailId")
     private String emailId;
     @JsonProperty("NoOfWeeks")
-    private String noOfWeeks;
+    private int noOfWeeks;
     @JsonProperty("Services")
     private List<Service> services = null;
 
@@ -45,12 +45,12 @@ public class Report {
     }
 
     @JsonProperty("NoOfWeeks")
-    public String getNoOfWeeks() {
+    public int getNoOfWeeks() {
         return noOfWeeks;
     }
 
     @JsonProperty("NoOfWeeks")
-    public void setNoOfWeeks(String noOfWeeks) {
+    public void setNoOfWeeks(int noOfWeeks) {
         this.noOfWeeks = noOfWeeks;
     }
 

@@ -14,10 +14,13 @@ public class Field {
 
     @JsonProperty("name")
     private String name;
+
+    @JsonProperty("partitioned")
+    private boolean partitioned=false;
+
+
     @JsonProperty("groupby_rank")
     private String groupbyRank;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("name")
     public String getName() {
@@ -39,14 +42,13 @@ public class Field {
         this.groupbyRank = groupbyRank;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
+    public boolean isPartitioned()
+    {
+        return partitioned;
     }
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
+    public void setPartitioned(boolean partitioned)
+    {
+        this.partitioned = partitioned;
     }
-
 }

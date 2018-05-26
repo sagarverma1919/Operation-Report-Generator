@@ -6,6 +6,7 @@
 package com.expedia.risk.report.generator.model;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class WeeklyDetails {
     @JsonProperty("Results")
     private List<String> results = null;
     @JsonProperty("ExtraColumn")
-    private Map<String, Object> extraColumns = new HashMap<String, Object>();
+    private Map<String, Object> extraColumns = new LinkedHashMap<String, Object>();
 
     @JsonProperty("TableName")
     public String getTableName() {

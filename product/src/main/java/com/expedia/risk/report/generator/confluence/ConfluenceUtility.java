@@ -1,4 +1,4 @@
-package com.expedia.risk.report.generator.Integration.flow.service;
+package com.expedia.risk.report.generator.confluence;
 
 import java.util.List;
 import java.util.Map;

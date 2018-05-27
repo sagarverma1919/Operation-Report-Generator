@@ -1,4 +1,4 @@
-package com.expedia.risk.report.generator.Integration.flow.service;
+package com.expedia.risk.report.generator.confluence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,16 +8,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
-import com.expedia.risk.report.generator.Integration.flow.config.Body;
-import com.expedia.risk.report.generator.Integration.flow.config.ConfluenceRequest;
-import com.expedia.risk.report.generator.Integration.flow.config.SSLUtil;
-import com.expedia.risk.report.generator.Integration.flow.config.Space;
-import com.expedia.risk.report.generator.Integration.flow.config.Storage;
-import com.expedia.risk.report.generator.Integration.flow.config.Version;
+import com.expedia.risk.report.generator.model.Body;
+import com.expedia.risk.report.generator.model.ConfluenceRequest;
+import com.expedia.risk.report.generator.util.SSLUtil;
+import com.expedia.risk.report.generator.model.Space;
+import com.expedia.risk.report.generator.model.Storage;
+import com.expedia.risk.report.generator.model.Version;
 import com.expedia.risk.report.generator.model.Field;
 import com.expedia.risk.report.generator.model.Report;
 import com.expedia.risk.report.generator.model.Service;
-import com.expedia.risk.report.generator.model.ServiceDetails;
 import com.expedia.risk.report.generator.model.WeeklyDetails;
 
 public class ConfluenceCreator
@@ -54,32 +53,6 @@ public class ConfluenceCreator
         {
             e.printStackTrace();
         }
-    }
-
-    private static ConfluenceRequest createConfRequest()
-    {
-
-        ConfluenceRequest request = new ConfluenceRequest();
-        Space space = new Space();
-        space.setKey("~shgoyal");
-        request.setSpace(space);
-        request.setTitle("Test Page 3");
-        request.setType("page");
-
-        Storage storage = new Storage();
-        storage.setRepresentation("storage");
-        //storage.setValue("<p>test</p>");
-        //  storage.setValue(ConfluenceUtility.createTableHeader("Test Page 2", "List Service", "OperationalMetrics"));
-        Body body = new Body();
-        body.setStorage(storage);
-        request.setBody(body);
-
-        request.setId("895067948");
-
-        Version version = new Version();
-        version.setNumber(5);
-        request.setVersion(version);
-        return request;
     }
 
 

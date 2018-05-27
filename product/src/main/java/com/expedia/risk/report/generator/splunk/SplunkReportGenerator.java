@@ -119,8 +119,9 @@ public class SplunkReportGenerator {
                     if (weekData.get(entryVal.getKey()) == null) {
                         final String[] split = entryVal.getValue().split(",");
                         for (String s : split) {
-                            mergeMap.put(split[0], split[1]);
-                            newVals.put(split[0], "0");
+                            final String[] splitVal = s.split("_");
+                            mergeMap.put(splitVal[0], splitVal[1]);
+                            newVals.put(splitVal[0], "0");
                         }
                     } else {
                         if (NumberUtil.isNumeric(entryVal.getValue())) {

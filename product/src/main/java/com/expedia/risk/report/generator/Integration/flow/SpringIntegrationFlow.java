@@ -14,8 +14,10 @@ import org.springframework.integration.dsl.Pollers;
 import org.springframework.integration.dsl.SourcePollingChannelAdapterSpec;
 import org.springframework.messaging.MessageHandler;
 
+import com.expedia.risk.report.generator.Integration.flow.service.ConfluencePageHandler;
 import com.expedia.risk.report.generator.Integration.flow.service.JsonToObjectMappingHandler;
 import com.expedia.risk.report.generator.Integration.flow.service.SplunkReportGenerationHandler;
+import com.expedia.risk.report.generator.Integration.flow.service.ValidationHandler;
 
 @Configuration
 @IntegrationComponentScan(basePackages = "com.expedia.risk.report.generator")
@@ -25,9 +27,13 @@ public class SpringIntegrationFlow {
     public IntegrationFlow fileTransferFromS3ToLocalUploadFolder(
             @Qualifier("s3MessageSource")
                     MessageSource<File> s3MessageSource,
-            MessageHandler localUploadFolderFileWritingMessageHandler
+            MessageHandler localUploadFolderFileWritingMessageHandler,
+            ValidationHandler validationHandler,
+            JsonToObjectMappingHandler jsonToObjectMappingHandler
     ) {
         return IntegrationFlows.from(s3MessageSource, pollingMessageSourceUsing(300, 1))
+                .handle(jsonToObjectMappingHandler)
+                .handle(validationHandler)
                 .handle(localUploadFolderFileWritingMessageHandler)
                 .get();
     }
@@ -36,12 +42,15 @@ public class SpringIntegrationFlow {
     public IntegrationFlow fileFromLocalUploadFolderReportGenerator(
             JsonToObjectMappingHandler jsonToObjectMappingHandler,
             @Qualifier("localUploadFolderMessageSource") MessageSource<File> localUploadFolderMessageSource,
-            SplunkReportGenerationHandler splunkReportGenerationHandler
+            SplunkReportGenerationHandler splunkReportGenerationHandler,
+            ConfluencePageHandler confluencePageHandler,
+            MessageHandler snsMessageHandler
     ) {
-        return IntegrationFlows.from(localUploadFolderMessageSource, pollingMessageSourceUsing(5000, 3))
+        return IntegrationFlows.from(localUploadFolderMessageSource, pollingMessageSourceUsing(50000, 3))
                 .handle(jsonToObjectMappingHandler)
                 .handle(splunkReportGenerationHandler)
-                //  .handle()
+                .handle(confluencePageHandler)
+                .handle(snsMessageHandler)
                 .get();
     }
     /*

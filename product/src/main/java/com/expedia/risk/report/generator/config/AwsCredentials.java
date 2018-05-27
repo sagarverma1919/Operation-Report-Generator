@@ -10,15 +10,24 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.sns.AmazonSNSAsync;
+import com.amazonaws.services.sns.AmazonSNSAsyncClientBuilder;
 
 @Configuration
 public class AwsCredentials {
 
     @Bean
     public AWSCredentialsProvider awsCredential(
-            @Value("${com.expedia.report.generator.iam.user.profile}") String profile
+            @Value("${com.expedia.report.generator.iam.s3.user.profile}") String profile
 
     ) {
+        return new ProfileCredentialsProvider(profile);
+    }
+
+    @Bean
+    public AWSCredentialsProvider snsCredential(
+            @Value("${com.expedia.report.generator.iam.sns.user.profile}") String profile
+    ){
         return new ProfileCredentialsProvider(profile);
     }
 
@@ -39,4 +48,11 @@ public class AwsCredentials {
                 .withCredentials(awsCredential)
                 .build();
     }
+
+    @Bean
+    public AmazonSNSAsync snsClient(AWSCredentialsProvider snsCredential) {
+        AmazonSNSAsync snsClient = AmazonSNSAsyncClientBuilder.standard().withCredentials(snsCredential).build();
+        return snsClient;
+    }
+
 }

@@ -5,9 +5,11 @@ import java.io.File;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.aws.inbound.S3InboundFileSynchronizer;
 import org.springframework.integration.aws.inbound.S3InboundFileSynchronizingMessageSource;
+import org.springframework.integration.aws.outbound.SnsMessageHandler;
 import org.springframework.integration.aws.support.filters.S3RegexPatternFileListFilter;
 import org.springframework.integration.config.EnableIntegration;
 import org.springframework.integration.core.MessageSource;
@@ -19,6 +21,7 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.sns.AmazonSNSAsync;
 
 
 @Configuration
@@ -88,5 +91,18 @@ public class SpringIntegrationConfig {
             }
         };
         return messageHandler;
+    }
+
+    @Bean
+    public MessageHandler snsMessageHandler(
+            @Value("${com.expedia.report.generator.sns.topic}") String snsTopic,
+            AmazonSNSAsync snsClient
+    ) {
+        SnsMessageHandler snsMessageHandler = new SnsMessageHandler(snsClient);
+        SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
+        snsMessageHandler.setSubject("Operation Report");
+        snsMessageHandler.setBodyExpression((spelExpressionParser.parseExpression("payload")));
+        snsMessageHandler.setTopicArn(snsTopic);
+        return snsMessageHandler;
     }
 }

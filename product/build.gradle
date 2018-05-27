@@ -9,7 +9,6 @@ repositories {
     mavenCentral()
     maven {url "http://splunk.artifactoryonline.com/splunk/ext-releases-local"}
     maven { url "http://repo.spring.io/plugins-release" }
-  //  maven {url "https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-aws"}
 
 }
 
@@ -31,4 +30,5 @@ dependencies {
     compile "org.springframework.integration:spring-integration-aws:$rev_spring_integration_aws"
     compile group: 'com.google.guava', name: 'guava', version: '20.0'
     compile "org.springframework.integration:spring-integration-file:$rev_spring"
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-sns', version: '1.11.251'
 }

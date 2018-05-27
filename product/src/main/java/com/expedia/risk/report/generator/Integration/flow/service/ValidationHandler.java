@@ -4,13 +4,14 @@ import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
 
+import com.expedia.risk.report.generator.model.Report;
 
 @MessageEndpoint
-public class ConfluencePageHandler {
+public class ValidationHandler {
 
     @ServiceActivator
-    public String createConfluencePage(Message<Object> message)
+    public void performValidation(Message<Object> message)
     {
-
+        Report report = (Report) message.getPayload();
     }
 }

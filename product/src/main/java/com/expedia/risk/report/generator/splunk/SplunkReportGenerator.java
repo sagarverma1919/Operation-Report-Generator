@@ -61,7 +61,6 @@ public class SplunkReportGenerator {
                                                  final int noOfWeeks) {
         final List<Field> fieldList = resultOnWeeklyBasis.get(0).getField();
         weeklyDetails.setFields(fieldList);
-        List<String> manipulatedResult = new ArrayList<>();
         Map<String, Integer> fieldMap = new HashMap<>(fieldList.size());
         int index = 0;
         for (final Field field : fieldList) {
@@ -176,7 +175,7 @@ public class SplunkReportGenerator {
         for (Map.Entry<String, String> entry : mergedDetailsMap.entrySet()) {
             System.out.println(entry.getKey() + "  ===  " + entry.getValue());
         }
-        final List<String> considatedSplunkResult = CommonUtil.getConsidatedSplunkResult(mergedDetailsMap, fieldMap);
+        final List<String> considatedSplunkResult = CommonUtil.getConsidatedSplunkResult(mergedDetailsMap, fieldMap, weeklyDetails.getExtraColumns(), weeklyDetails);
 
         weeklyDetails.setResults(considatedSplunkResult);
     }

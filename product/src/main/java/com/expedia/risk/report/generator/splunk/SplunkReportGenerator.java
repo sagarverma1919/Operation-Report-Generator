@@ -139,7 +139,7 @@ public class SplunkReportGenerator {
         Map<Integer, SplunkResult> splunkResults = new HashMap<>();
         final ZoneId newYokZoneId = ZoneId.of(ZONE_ID);
         for (int index = 0; index < noOfWeeks; index++) {
-            final String earliestDate = DateUtil.getPreviousDate(latestDate, format, ZONE_ID);
+            final String earliestDate = DateUtil.getPreviousDate(latestDate, format, ZONE_ID, 7);
             final String splunkResult = splunkQueryExecutor
                     .execute(splunkCredentials.getSplunkCredentials(), query, latestDate.format(format.withZone
                             (newYokZoneId)), earliestDate);

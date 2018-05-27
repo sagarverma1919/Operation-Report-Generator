@@ -1,9 +1,13 @@
-package com.expedia.risk.report.generator.Integration.flow.service;
+package com.expedia.risk.report.generator.confluence;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.expedia.risk.report.generator.model.Field;
 import com.expedia.risk.report.generator.model.Report;
@@ -138,11 +142,14 @@ public class ConfluenceUtility
                     String[] inner_inner = inner.split("#");
                     for (String in : inner_inner)
                     {
+                        in = parseNumberToFormat(in);
+
                         sb.append("<td colspan=\"1\" class=\"confluenceTd\">" + in + "</td>");
                     }
                 }
                 else
                 {
+                    inner = parseNumberToFormat(inner);
                     sb.append("<td colspan=\"1\" class=\"confluenceTd\"><p>" + inner + "</p></td>");
                 }
             }
@@ -181,6 +188,23 @@ public class ConfluenceUtility
                 + weeklyDetails.getQuery() + "</pre> ");
         sb.append("</div></div>");
         return sb.toString();
+    }
+
+    private static String parseNumberToFormat(String inner)
+    {
+        if(!StringUtils.isEmpty(inner) && !inner.contains(",") && isInteger(inner)){
+            Number n = null;
+            try
+            {
+                n = NumberFormat.getInstance().parse(inner);
+            }
+            catch (ParseException e)
+            {
+                e.printStackTrace();
+            }
+            inner = NumberFormat.getNumberInstance(Locale.US).format(n);
+        }
+        return inner;
     }
 
     /**
@@ -233,4 +257,15 @@ public class ConfluenceUtility
     }
 
 
+    public static boolean isInteger(String s) {
+        try {
+            Long.parseLong(s);
+        } catch(NumberFormatException e) {
+            return false;
+        } catch(NullPointerException e) {
+            return false;
+        }
+        // only got here if we didn't return false
+        return true;
+    }
 }

@@ -1,4 +1,4 @@
-package com.expedia.risk.report.generator.Integration.flow.config;
+package com.expedia.risk.report.generator.model;
 
 public class Space
 {

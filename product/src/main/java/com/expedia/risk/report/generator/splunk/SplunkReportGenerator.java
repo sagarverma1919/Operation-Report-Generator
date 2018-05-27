@@ -23,6 +23,7 @@ import com.expedia.risk.report.generator.model.Report;
 import com.expedia.risk.report.generator.model.Service;
 import com.expedia.risk.report.generator.model.SplunkResult;
 import com.expedia.risk.report.generator.model.WeeklyDetails;
+import com.expedia.risk.report.generator.util.CommonUtil;
 import com.expedia.risk.report.generator.util.DateUtil;
 import com.expedia.risk.report.generator.util.NumberUtil;
 
@@ -175,8 +176,9 @@ public class SplunkReportGenerator {
         for (Map.Entry<String, String> entry : mergedDetailsMap.entrySet()) {
             System.out.println(entry.getKey() + "  ===  " + entry.getValue());
         }
+        final List<String> considatedSplunkResult = CommonUtil.getConsidatedSplunkResult(mergedDetailsMap, fieldMap);
 
-        weeklyDetails.setResults(manipulatedResult);
+        weeklyDetails.setResults(considatedSplunkResult);
     }
 
 

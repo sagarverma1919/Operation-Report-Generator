@@ -12,8 +12,8 @@ import java.time.format.DateTimeFormatter;
 public class DateUtil {
 
     public static String getPreviousDate(final LocalDateTime localDateTime, final DateTimeFormatter format, final
-    String timeZone) {
-        final LocalDateTime then = localDateTime.minusDays(7);
+    String timeZone, int previousDaya) {
+        final LocalDateTime then = localDateTime.minusDays(previousDaya);
         ZoneId newYokZoneId = ZoneId.of(timeZone);
         return then.format(format.withZone(newYokZoneId));
     }

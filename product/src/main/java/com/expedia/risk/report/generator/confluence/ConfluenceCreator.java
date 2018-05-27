@@ -1,5 +1,7 @@
 package com.expedia.risk.report.generator.confluence;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,7 @@ import com.expedia.risk.report.generator.model.Service;
 import com.expedia.risk.report.generator.model.Space;
 import com.expedia.risk.report.generator.model.Storage;
 import com.expedia.risk.report.generator.model.WeeklyDetails;
+import com.expedia.risk.report.generator.util.DateUtil;
 import com.expedia.risk.report.generator.util.SSLUtil;
 
 public class ConfluenceCreator
@@ -24,29 +27,10 @@ public class ConfluenceCreator
     {
         try
         {
-            /*final String SERVER_URI = "https://confluence/rest/api/content/895067948";
-            final String DOWNLOAD_SERVER_URI = "https://confluence/rest/api/content/894255080/child/attachment";
+            Report report = populateRequestWith2Weeks();
+            String link = generateConfluencePage(report);
+            System.out.print(link);
 
-            RestTemplate restTemplate = new RestTemplate();
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "Basic ");
-            headers.add("contentType", "application/json");
-
-            ConfluenceRequest request = createConfRequest();
-            HttpEntity<ConfluenceRequest> entity = new HttpEntity<>(request, headers);
-
-            SSLUtil.turnOffSslChecking();
-            Object object = restTemplate.exchange(SERVER_URI, HttpMethod.PUT, entity, Object.class);
-            System.out.println(object);*/
-            generateConfluencePage();
-
-            //HttpEntity<Object> entity2 = new HttpEntity<>(headers);
-            //SSLUtil.turnOffSslChecking();
-            //ResponseEntity<Object> downloadAttachment = restTemplate.exchange(DOWNLOAD_SERVER_URI, HttpMethod.GET,
-            // entity2, Object.class);
-
-            //System.out.println(downloadAttachment);
         }
         catch (Exception e)
         {
@@ -58,21 +42,23 @@ public class ConfluenceCreator
     /**
      * Generate confluence page
      */
-    private static void generateConfluencePage()
+    private static String generateConfluencePage(Report report)
     {
         try
         {
             final String SERVER_URI = "https://confluence/rest/api/content";
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Authorization", "Basic ");
+            headers.add("Authorization", "Basic Z2F1amFpbjpwcmFzbmF0aDEhMTIzNDU2Nw==");
             headers.add("contentType", "application/json");
-            Report report = populateRequestWith2Weeks();
             ConfluenceRequest request = renderConfluencePage(report);
             HttpEntity<ConfluenceRequest> entity = new HttpEntity<>(request, headers);
             SSLUtil.turnOffSslChecking();
             Object object = restTemplate.exchange(SERVER_URI, HttpMethod.POST, entity, Object.class);
             System.out.println(object);
+            String generatedConfluenceLink =
+                    "https://confluence/display/" + request.getSpace().getKey() + "/" + report.getReportName();
+            return generatedConfluenceLink;
         }
         catch (Exception e)
         {
@@ -90,7 +76,12 @@ public class ConfluenceCreator
         Space space = new Space();
         space.setKey("~shgoyal");
         request.setSpace(space);
-        request.setTitle(report.getReportName());
+        final DateTimeFormatter format =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime latestDate = LocalDateTime.now();
+        String previousDate = DateUtil.getPreviousDate(latestDate, format, "Asia/Kolkata", 7);
+        String currentDate = DateUtil.getPreviousDate(latestDate, format, "Asia/Kolkata", 1);
+        request.setTitle(String.format(report.getReportName(), previousDate, currentDate));
         request.setType("page");
         Storage storage = new Storage();
         storage.setRepresentation("storage");
@@ -109,7 +100,7 @@ public class ConfluenceCreator
         {
             Report report = new Report();
             report.setEmailId("abc@expedia.com");
-            report.setReportName("Fraud Ops Report 2018-05-21 - 2018-05-27_Mapper_10");
+            report.setReportName("Fraud Ops Report %s - %s_Mapper");
             report.setNoOfWeeks(3);
             ArrayList<Service> servicesList = new ArrayList<>(1);
             List<WeeklyDetails> weeklyDetailsList = new ArrayList<>(2);
@@ -120,7 +111,9 @@ public class ConfluenceCreator
 
             WeeklyDetails weeklyDetails = new WeeklyDetails();
             weeklyDetails.setQuery(
-                    "index=fraud sourcetype=risk_listservice_perf ActivityName=endpoint* ActivityStep=rs (OperationName=lookup OR OperationName=addItems OR OperationName=items) | stats count, exactperc99(Duration), exactperc99.9(Duration) by OperationName, RequestMethod");
+                    "index=fraud sourcetype=risk_listservice_perf ActivityName=endpoint* ActivityStep=rs "
+                            + "(OperationName=lookup OR OperationName=addItems OR OperationName=items) | stats count,"
+                            + " exactperc99(Duration), exactperc99.9(Duration) by OperationName, RequestMethod");
             weeklyDetails.setExtraColumns("SLA in ms", new String[]{"250", "5,000", "1,000", "1,000"});
             weeklyDetails.setExtraColumns("Comments", null);
             weeklyDetails.setTableName("Operational Metrics");
@@ -186,7 +179,7 @@ public class ConfluenceCreator
                     "index=fraud sourcetype=\"fraudws_perf\"  ActivityName=\"endpoint*\" ActivityStep=rs "
                             + "(OperationName=sladetails OR OperationName=cancelOrder OR OperationName=release) | "
                             + "stats count, exactperc99(Duration), exactperc99.9(Duration) by OperationName");
-            weeklyDetails.setExtraColumns("SLA", new String[]{"400","90,000","90,000"});
+            weeklyDetails.setExtraColumns("SLA", new String[]{"400", "90,000", "90,000"});
             weeklyDetails.setExtraColumns("Comments", null);
             weeklyDetails.setTableName("Operational Metrics ");
             resultList = new ArrayList<>(4);
@@ -227,13 +220,12 @@ public class ConfluenceCreator
     }
 
 
-
     private static Report populateRequestWith2Weeks()
     {
         {
             Report report = new Report();
             report.setEmailId("abc@expedia.com");
-            report.setReportName("Fraud Ops Report 2018-05-21 - 2018-05-27_Mapper_11");
+            report.setReportName("Fraud Ops Report %s - %s_Mapper_12");
             report.setNoOfWeeks(2);
             ArrayList<Service> servicesList = new ArrayList<>(1);
             List<WeeklyDetails> weeklyDetailsList = new ArrayList<>(2);
@@ -243,7 +235,9 @@ public class ConfluenceCreator
             service.setServiceName("ListService");
 
             WeeklyDetails weeklyDetails = new WeeklyDetails();
-            weeklyDetails.setQuery("index=fraud sourcetype=risk_listservice_perf ActivityName=endpoint* ActivityStep=rs (OperationName=lookup OR OperationName=addItems OR OperationName=items) | stats count, exactperc99(Duration), exactperc99.9(Duration) by OperationName, RequestMethod");
+            weeklyDetails.setQuery("index=fraud sourcetype=risk_listservice_perf ActivityName=endpoint* "
+                    + "ActivityStep=rs (OperationName=lookup OR OperationName=addItems OR OperationName=items) | "
+                    + "stats count, exactperc99(Duration), exactperc99.9(Duration) by OperationName, RequestMethod");
             weeklyDetails.setExtraColumns("SLA in ms", new String[]{"250", "5,000", "1,000", "1,000"});
             weeklyDetails.setExtraColumns("Comments", null);
             weeklyDetails.setTableName("Operational Metrics");
@@ -309,7 +303,7 @@ public class ConfluenceCreator
                     "index=fraud sourcetype=\"fraudws_perf\"  ActivityName=\"endpoint*\" ActivityStep=rs "
                             + "(OperationName=sladetails OR OperationName=cancelOrder OR OperationName=release) | "
                             + "stats count, exactperc99(Duration), exactperc99.9(Duration) by OperationName");
-            weeklyDetails.setExtraColumns("SLA", new String[]{"400","90000","90000"});
+            weeklyDetails.setExtraColumns("SLA", new String[]{"400", "90000", "90000"});
             weeklyDetails.setExtraColumns("Comments", null);
             weeklyDetails.setTableName("Operational Metrics ");
             resultList = new ArrayList<>(4);

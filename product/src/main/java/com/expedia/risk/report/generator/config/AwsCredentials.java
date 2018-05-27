@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.sns.AmazonSNSAsync;
@@ -43,15 +44,17 @@ public class AwsCredentials {
                 .withMaxErrorRetry(maxErrorRetry);
 
         return AmazonS3ClientBuilder.standard()
-                .withRegion(region)
+                .withRegion(Regions.US_WEST_2)
                 .withClientConfiguration(clientConfiguration)
                 .withCredentials(awsCredential)
                 .build();
     }
 
     @Bean
-    public AmazonSNSAsync snsClient(AWSCredentialsProvider snsCredential) {
-        AmazonSNSAsync snsClient = AmazonSNSAsyncClientBuilder.standard().withCredentials(snsCredential).build();
+    public AmazonSNSAsync snsClient(
+            AWSCredentialsProvider snsCredential,
+            @Value("${com.expedia.report.generator.aws.region}") String region) {
+        AmazonSNSAsync snsClient = AmazonSNSAsyncClientBuilder.standard().withCredentials(snsCredential).withRegion(region).build();
         return snsClient;
     }
 

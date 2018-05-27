@@ -23,7 +23,7 @@ import com.expedia.risk.report.generator.util.SSLUtil;
 
 public class ConfluenceCreator
 {
-    public static void main(String[] args)
+   /* public static void main(String[] args)
     {
         try
         {
@@ -36,13 +36,13 @@ public class ConfluenceCreator
         {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
     /**
      * Generate confluence page
      */
-    private static String generateConfluencePage(Report report)
+    public  String generateConfluencePage(Report report)
     {
         try
         {
@@ -51,6 +51,13 @@ public class ConfluenceCreator
             HttpHeaders headers = new HttpHeaders();
             headers.add("Authorization", "Basic Z2F1amFpbjpwcmFzbmF0aDEhMTIzNDU2Nw==");
             headers.add("contentType", "application/json");
+
+            final DateTimeFormatter format =
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDateTime latestDate = LocalDateTime.now();
+            String previousDate = DateUtil.getPreviousDate(latestDate, format, "Asia/Kolkata", 7);
+            String currentDate = DateUtil.getPreviousDate(latestDate, format, "Asia/Kolkata", 1);
+            report.setReportName(String.format(report.getReportName(), previousDate, currentDate));
             ConfluenceRequest request = renderConfluencePage(report);
             HttpEntity<ConfluenceRequest> entity = new HttpEntity<>(request, headers);
             SSLUtil.turnOffSslChecking();
@@ -64,6 +71,7 @@ public class ConfluenceCreator
         {
             e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -76,12 +84,7 @@ public class ConfluenceCreator
         Space space = new Space();
         space.setKey("~shgoyal");
         request.setSpace(space);
-        final DateTimeFormatter format =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime latestDate = LocalDateTime.now();
-        String previousDate = DateUtil.getPreviousDate(latestDate, format, "Asia/Kolkata", 7);
-        String currentDate = DateUtil.getPreviousDate(latestDate, format, "Asia/Kolkata", 1);
-        request.setTitle(String.format(report.getReportName(), previousDate, currentDate));
+        request.setTitle(report.getReportName());
         request.setType("page");
         Storage storage = new Storage();
         storage.setRepresentation("storage");
@@ -95,7 +98,7 @@ public class ConfluenceCreator
     /**
      * populate Request
      */
-    private static Report populateRequestWith3Weeks()
+    public static Report populateRequestWith3Weeks()
     {
         {
             Report report = new Report();
@@ -220,7 +223,7 @@ public class ConfluenceCreator
     }
 
 
-    private static Report populateRequestWith2Weeks()
+    public static Report populateRequestWith2Weeks()
     {
         {
             Report report = new Report();

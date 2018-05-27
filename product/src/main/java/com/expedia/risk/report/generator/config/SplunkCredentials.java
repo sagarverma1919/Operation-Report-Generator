@@ -15,10 +15,10 @@ import com.splunk.ServiceArgs;
 public class SplunkCredentials {
 
 
-    @Value("${com.expedia.splunk.user}")
+    @Value("${com.expedia.sea.user}")
     private String userName;
 
-    @Value("${com.expedia.splunk.password}")
+    @Value("${com.expedia.sea.password}")
     private String password;
 
     private String splunkHost = "splunklab6";

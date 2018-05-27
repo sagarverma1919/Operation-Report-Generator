@@ -13,6 +13,7 @@ import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.Pollers;
 import org.springframework.integration.dsl.SourcePollingChannelAdapterSpec;
 import org.springframework.messaging.MessageHandler;
+import org.springframework.messaging.MessageHeaders;
 
 import com.expedia.risk.report.generator.Integration.flow.service.ConfluencePageHandler;
 import com.expedia.risk.report.generator.Integration.flow.service.JsonToObjectMappingHandler;
@@ -46,20 +47,23 @@ public class SpringIntegrationFlow {
             ConfluencePageHandler confluencePageHandler,
             MessageHandler snsMessageHandler
     ) {
-        return IntegrationFlows.from(localUploadFolderMessageSource, pollingMessageSourceUsing(50000, 3))
+        return IntegrationFlows.from(localUploadFolderMessageSource, pollingMessageSourceUsing(5000, 3))
                 .handle(jsonToObjectMappingHandler)
                 .handle(splunkReportGenerationHandler)
                 .handle(confluencePageHandler)
                 .handle(snsMessageHandler)
                 .get();
     }
-    /*
+
+
     @Bean
-    public IntegrationFlow errorHandlingChannel() {
+    public IntegrationFlow errorHandlingChannel(
+            MessageHandler snsMessageHandler
+    ) {
         return IntegrationFlows.from(MessageHeaders.ERROR_CHANNEL)
-                .handle("") //Send mail to recipient
+                .handle(snsMessageHandler)
                 .get();
-    }*/
+    }
 
 
     private Consumer<SourcePollingChannelAdapterSpec> pollingMessageSourceUsing(

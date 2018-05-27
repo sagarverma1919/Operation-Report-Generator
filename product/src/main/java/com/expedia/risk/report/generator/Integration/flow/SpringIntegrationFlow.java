@@ -33,8 +33,8 @@ public class SpringIntegrationFlow {
             JsonToObjectMappingHandler jsonToObjectMappingHandler
     ) {
         return IntegrationFlows.from(s3MessageSource, pollingMessageSourceUsing(300, 1))
-                .handle(jsonToObjectMappingHandler)
-                .handle(validationHandler)
+               // .handle(jsonToObjectMappingHandler)
+              //  .handle(validationHandler)
                 .handle(localUploadFolderFileWritingMessageHandler)
                 .get();
     }

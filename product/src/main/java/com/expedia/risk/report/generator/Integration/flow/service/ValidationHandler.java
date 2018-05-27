@@ -12,6 +12,6 @@ public class ValidationHandler {
     @ServiceActivator
     public void performValidation(Message<Object> message)
     {
-        Report report = (Report) message.getPayload();
+        //Report report = (Report) message.getPayload();
     }
 }

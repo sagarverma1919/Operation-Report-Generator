@@ -14,12 +14,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class JsonToObjectMappingHandler {
 
     @ServiceActivator
-    public String jsonToObjectMapping(Message<Object> messsage) throws IOException {
+    public Report jsonToObjectMapping(Message<Object> messsage) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         File file = (File) messsage.getPayload();
-        return "Hello World";
-        //Report report = mapper.readValue(file, Report.class);
-        //return report;
+        Report report = mapper.readValue(file, Report.class);
+        return report;
     }
 
 

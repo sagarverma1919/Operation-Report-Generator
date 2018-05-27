@@ -16,10 +16,10 @@ public class SplunkCredentials {
 
 
     @Value("${com.expedia.splunk.user}")
-    private String userName = "jasmkaur";
+    private String userName;
 
     @Value("${com.expedia.splunk.password}")
-    private String password = "Sunridges_13";
+    private String password;
 
     private String splunkHost = "splunklab6";
 

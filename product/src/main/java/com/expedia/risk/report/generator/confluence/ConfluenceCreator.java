@@ -64,6 +64,8 @@ public class ConfluenceCreator
         {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     /**

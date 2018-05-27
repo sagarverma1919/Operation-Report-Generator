@@ -12,5 +12,6 @@ public class ConfluencePageHandler {
     public String createConfluencePage(Message<Object> message)
     {
 
+        return  null;
     }
 }

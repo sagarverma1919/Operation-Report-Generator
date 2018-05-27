@@ -1,16 +1,17 @@
 package com.expedia.risk.report.generator.Integration.flow.service;
 
-import org.springframework.integration.annotation.MessageEndpoint;
-import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.messaging.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@MessageEndpoint
+import com.expedia.risk.report.generator.config.SplunkCredentials;
+import com.expedia.risk.report.generator.splunk.SplunkReportGenerator;
+
 public class SplunkReportGenerationHandler {
 
-    @ServiceActivator
-    public void reportGenerator(Message<Object> message) {
-        System.out.println(message.getPayload() + "," + message.getHeaders());
+    @Autowired
+    private SplunkCredentials splunkCredentials;
 
-        return;
-    }
+    @Autowired
+    private SplunkReportGenerator splunkReportGenerator;
+
+
 }

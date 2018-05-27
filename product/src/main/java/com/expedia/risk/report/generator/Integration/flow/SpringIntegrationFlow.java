@@ -16,6 +16,7 @@ import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessageHeaders;
 
 import com.expedia.risk.report.generator.Integration.flow.service.ConfluencePageHandler;
+import com.expedia.risk.report.generator.Integration.flow.service.ErrorHandler;
 import com.expedia.risk.report.generator.Integration.flow.service.JsonToObjectMappingHandler;
 import com.expedia.risk.report.generator.Integration.flow.service.SplunkReportGenerationHandler;
 import com.expedia.risk.report.generator.Integration.flow.service.ValidationHandler;
@@ -33,7 +34,7 @@ public class SpringIntegrationFlow {
             JsonToObjectMappingHandler jsonToObjectMappingHandler
     ) {
         return IntegrationFlows.from(s3MessageSource, pollingMessageSourceUsing(300, 1))
-               // .handle(jsonToObjectMappingHandler)
+             //   .handle(jsonToObjectMappingHandler)
               //  .handle(validationHandler)
                 .handle(localUploadFolderFileWritingMessageHandler)
                 .get();
@@ -58,9 +59,11 @@ public class SpringIntegrationFlow {
 
     @Bean
     public IntegrationFlow errorHandlingChannel(
-            MessageHandler snsMessageHandler
+            MessageHandler snsMessageHandler,
+            ErrorHandler errorHandler
     ) {
         return IntegrationFlows.from(MessageHeaders.ERROR_CHANNEL)
+                .handle(errorHandler)
                 .handle(snsMessageHandler)
                 .get();
     }
